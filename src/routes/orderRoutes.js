@@ -1,16 +1,16 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const orderController = require("../controllers/orderController");
-const authMiddleware = require("../middlewares/authMiddleware");
-const upload = require("../middlewares/uploadMiddleware"); // for POD image upload
+const orderController = require('../controllers/orderController');
+const authMiddleware = require('../middlewares/authMiddleware');
+const uploadMiddleware = require('../middlewares/uploadMiddleware');
 
-// Customer creates an order
-router.post("/create", authMiddleware, orderController.createOrder);
+// Create a new delivery order (Push scenario)
+router.post('/', authMiddleware, orderController.createOrder);
 
-// Admin/dispatcher assigns rider
-router.post("/assign", authMiddleware, orderController.assignRider);
+// Get all orders for logged in customer
+router.get('/', authMiddleware, orderController.getOrders);
 
-// Rider uploads proof of delivery
-router.post("/pod", authMiddleware, upload.single("podImage"), orderController.capturePOD);
+// Complete delivery & upload POD
+router.post('/:id/complete', authMiddleware, uploadMiddleware.single('podImage'), orderController.completeOrder);
 
 module.exports = router;
