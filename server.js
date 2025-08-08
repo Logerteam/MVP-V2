@@ -4,14 +4,20 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-const routes = require('./src/routes');
+const routes = require('./src/routes'); // existing routes
+const orderRoutes = require('./src/routes/orderRoutes'); // new push scenario routes
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+
+// Existing API routes
 app.use('/api', routes);
 
-// health
+// Push Scenario API
+app.use('/api/orders', orderRoutes);
+
+// health check
 app.get('/health', (req, res) => res.json({ ok: true, env: process.env.NODE_ENV || 'dev' }));
 
 const port = process.env.PORT || 4000;
